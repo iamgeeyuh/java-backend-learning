@@ -11,7 +11,11 @@ public class HttpUtil {
     public static void sendResponse(HttpExchange exchange, int status, String response)
             throws IOException {
 
-        byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+        String body = "{ \"status\": " + status + ", \"data\": " + response + " }";
+
+        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+
+        exchange.getResponseHeaders().set("Content-Type", "application/json");
 
         exchange.sendResponseHeaders(status, bytes.length);
 

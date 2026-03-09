@@ -3,12 +3,20 @@ package controller;
 import java.io.IOException;
 
 import com.sun.net.httpserver.HttpExchange;
+
+import dto.GetRecipes;
+import service.RecipeService;
 import util.HttpUtil;
+import model.Recipe;
+import java.util.Collection;
 
 public class RecipeController {
 
+    private RecipeService recipeService;
 
-    public RecipeController() {}
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     public void handle(HttpExchange exchange) throws IOException {
 
@@ -35,6 +43,8 @@ public class RecipeController {
     }
 
     private void getAllRecipes(HttpExchange exchange) throws IOException {
-        HttpUtil.sendResponse(exchange, 200, "Hello");
+        Collection<Recipe> recipes = recipeService.getAll();
+        GetRecipes response = new GetRecipes(recipes);
+        HttpUtil.sendResponse(exchange, 200, response.toJson());
     }
 }
